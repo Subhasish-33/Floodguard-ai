@@ -1,134 +1,97 @@
-# 🌊 FloodGuard AI
+# FloodGuard AI — Disaster Response Digital Twin (Phase-3)
 
-### AI-Powered Disaster Response Digital Twin
+AI-powered, Odisha-scale disaster intelligence platform with **live terrain-aware flood rehearsal**, **village intelligence**, **evacuation routing**, **drone coordination**, and HTTP simulation contracts for operational command centers.
 
-FloodGuard AI is a real-time 3D disaster simulation platform designed to predict flood spread, identify vulnerable villages, generate evacuation routes, and assist emergency response teams using AI and geospatial intelligence.
+## Strategic Narrative
 
----
+India loses over INR 1.5 lakh crore annually to floods, cyclones, and compound disasters. Phase-3 transforms FloodGuard from a predictive simulation engine into an **operational disaster-response command interface**. It fuses physical flood propagation with human telemetry to execute life-saving logistical missions.
 
-## 🚨 Problem
+## Phase-3 Capabilities (New)
 
-India loses over ₹1.5 lakh crore annually due to floods, cyclones, and natural disasters.
+- **Village Intelligence System**: Real-time telemetry on affected populations, synthetic district demographics, and deterministic risk-band scoring (safe/watch/warning/critical) driven by dynamic water-level intersection.
+- **Evacuation Architecture**: A* pathfinding concepts integrated over 3D terrain to connect high-risk villages to secure high-ground zones avoiding submerged paths.
+- **Drone Coordination Layer**: Tactical UAV waypoints (surveillance, supply drops, return paths) orchestrated for live reconnaissance over flooded hotspots.
+- **Operational Command Dashboard**: Tactical intelligence panels broadcasting global escalation level, active hotspots, and district-level evacuation urgency metrics.
+- **Backend Expansion**: FastAPI endpoints prepared for PostGIS, capable of serving village intelligence, routing tasks, and drone logistics to multi-tenant consumers.
 
-Emergency response is often delayed because:
-- Flood spread visibility is limited
-- Evacuation planning is manual
-- Villages lack early warnings
-- Terrain intelligence is fragmented
+## Phase-2 Capabilities (Carried Forward)
 
-FloodGuard AI aims to solve this using real-time digital twin technology.
+- Cellular-automaton-style flood propagation with configurable rainfall + hydraulic velocity.
+- Deterministic timeline scrubbing with escalation tagging.
+- Hotspot rehearsal lanes for Puri, Kendrapara, and Jagatsinghpur.
+- Animated inundation visuals: dynamic terrain tinting + translucent water veil.
 
----
-
-## 🌍 Core Features
-
-- 🌊 Real-time flood spread simulation
-- 🛰 Satellite terrain visualization
-- 🏘 Village-level flood risk analysis
-- 🤖 AI-based flood prediction
-- 🛣 Intelligent evacuation routing
-- 🚁 Drone waypoint generation
-- 📡 Emergency coordination dashboard
-
----
-
-## 🧠 Tech Stack
-
-- React + Vite
-- Three.js
-- FastAPI
-- Python
-- GIS & Elevation Data
-- AI/ML Prediction Models
-
----
-
-## 🧩 System Overview
-
-This end-to-end flow powers the FloodGuard AI digital twin:
-
-![FloodGuard End-to-End Flow](docs/infographics/system-flow-vertical.png)
-
----
-
-## ⚙️ Simulation Pipeline
-
-From terrain generation to actionable response:
-
-![FloodGuard Technical Pipeline](docs/infographics/pipeline-horizontal.png)
-
----
-
-## 🏗 Flood Simulation Architecture
-
-How simulation layers, triggers, and response outputs connect:
-
-![Flood Simulation Architecture](docs/infographics/flood-sim-architecture.png)
-
----
-
-## 🛠 Full Stack Architecture
-
-Data-to-response architecture across frontend, backend, and operations:
-
-![FloodGuard Stack Architecture](docs/infographics/stack-architecture.png)
-
----
-
-## 🗺 Product Roadmap
-
-Milestone-wise plan from prototype to national scale:
-
-![Disaster Twin Roadmap](docs/infographics/roadmap.png)
-
----
-
-## ⏱ Flood Escalation Timeline
-
-Decision intelligence by time-to-impact:
-
-![Flood Escalation Timeline](docs/infographics/escalation-timeline.png)
-
----
-
-## 📦 Initial Repository Structure
+## Architecture at a Glance
 
 ```text
-FloodGuard-AI/
-├── frontend/
-│   └── src/
-│       ├── assets/
-│       ├── components/
-│       ├── hooks/
-│       ├── scenes/
-│       ├── services/
-│       └── styles/
-├── backend/
-│   ├── app/
-│   │   ├── api/
-│   │   ├── core/
-│   │   ├── models/
-│   │   ├── schemas/
-│   │   ├── services/
-│   │   └── utils/
-│   └── tests/
-├── data/
-│   ├── external/
-│   ├── processed/
-│   └── raw/
-├── docs/
-│   └── infographics/
-├── infra/
-├── ml/
-│   ├── models/
-│   ├── notebooks/
-│   └── training/
-└── scripts/
+[data/manifest + GeoJSON + DEM]
+            │
+            ▼
+[Dataset sync → frontend/public/data]
+            │
+            ├─► React/Vite HUD + Zustand disaster + simulation + intelligence stores
+            │       └─► R3F scene (terrain, water, villages, drones, evacuation paths)
+            │
+            └─► simulation/ TS package ──► importable engine for worker/CLIs
+            │
+FastAPI (`backend/app`) mirrors physics + operational logistics for API consumers
 ```
 
----
+## Repository Structure (Phase-3 Updates)
 
-## 🎯 Vision
+```text
+.
+├── frontend/
+│   ├── src/
+│   │   ├── components/map/layers/  # Added IntelligenceLayer (villages, drones)
+│   │   ├── store/                  # Added useIntelligenceStore.ts
+│   │   └── types/                  # Added intelligence.ts
+├── backend/
+│   ├── app/
+│   │   ├── api/routes/             # Added intelligence.py (villages, routes, drones)
+│   │   ├── schemas/                # Added intelligence schemas
+├── docs/
+│   └── reports/                    # Phase-3 technical, scalability, and routing reports
+```
 
-FloodGuard AI turns disaster management from reactive response to proactive, data-driven action.  
-The goal is not just simulation, but saving lives through early warning, better planning, and coordinated field execution.
+## Hotspot Evacuation Workflow (Phase-3)
+
+1. Operator selects a coastal district inside the `SimulationDeck`.
+2. `useSimulationLifecycle` activates flood physics and simultaneously fetches intelligence via `useIntelligenceStore`.
+3. As flood depth rises, villages automatically escalate from `watch` to `critical`.
+4. High-risk markers blink red in the 3D scene, displaying population at risk and real-time submersion depth.
+5. Evacuation routes visualize safe paths to high ground, turning red if compromised by flood propagation.
+6. Tactical UAVs execute sweeping loops over hotspots to provide simulated ground truth.
+
+## Frontend Setup
+
+```bash
+cd frontend
+npm install
+npm run dev        # runs dataset sync automatically
+```
+
+## Backend Setup
+
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8000
+```
+Interactive API docs: `http://127.0.0.1:8000/docs`
+
+## Documentation / Reports (Phase-3)
+
+- `docs/reports/phase3-technical-implementation-report.md`
+- `docs/reports/evacuation-architecture-report.md`
+- `docs/reports/routing-system-documentation.md`
+- `docs/reports/scalability-optimization-phase3.md`
+- `docs/reports/business-viability-phase3.md`
+- `docs/reports/ai-integration-recommendations-phase3.md`
+- `docs/reports/deployment-readiness-report.md`
+
+## Investor / Demo Guidance
+
+Demonstrate the **hotspot choreography** and advance the simulation timeline to watch the **tactical village intelligence** update in real-time. Show the Command Center side-panel to prove that this is a Palantir-style operational tool—not just a map. Emphasize that evacuation paths and drone assets actively react to the physical flood plane.
