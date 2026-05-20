@@ -1,0 +1,61 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "district_id": "khordha", "district_name": "Khordha" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[84.6, 19.8], [85.2, 19.8], [85.2, 20.5], [84.6, 20.5], [84.6, 19.8]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district_id": "puri", "district_name": "Puri" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[85.2, 19.2], [86.0, 19.2], [86.0, 20.0], [85.2, 20.0], [85.2, 19.2]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district_id": "cuttack", "district_name": "Cuttack" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[85.1, 20.2], [86.0, 20.2], [86.0, 21.0], [85.1, 21.0], [85.1, 20.2]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district_id": "balasore", "district_name": "Balasore" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[86.5, 20.6], [87.1, 20.6], [87.1, 21.5], [86.5, 21.5], [86.5, 20.6]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district_id": "jagatsinghpur", "district_name": "Jagatsinghpur" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[86.0, 19.85], [86.75, 19.85], [86.75, 20.45], [86.0, 20.45], [86.0, 19.85]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district_id": "kendrapara", "district_name": "Kendrapara" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[86.25, 20.15], [87.05, 20.15], [87.05, 21.05], [86.25, 21.05], [86.25, 20.15]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district_id": "sambalpur", "district_name": "Sambalpur" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[83.6, 21.1], [84.4, 21.1], [84.4, 22.0], [83.6, 22.0], [83.6, 21.1]]]
+      }
+    }
+  ]
+}

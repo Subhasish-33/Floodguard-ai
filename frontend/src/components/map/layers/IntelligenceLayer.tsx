@@ -3,9 +3,10 @@ import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { useIntelligenceStore } from '@/store/useIntelligenceStore'
 import { Html } from '@react-three/drei'
-import { projectCoordinates } from '@/utils/geospatial'
+import { lonLatToScene } from '@/utils/geospatial'
+import type { BoundingBox } from '@/types/geospatial'
 
-export const IntelligenceLayer = ({ bbox }: { bbox: [number, number, number, number] }) => {
+export const IntelligenceLayer = ({ bbox }: { bbox: BoundingBox }) => {
   const { villages, villageRisks, evacuationRoutes, droneMissions } = useIntelligenceStore()
   
   const riskMap = useMemo(() => {
@@ -26,7 +27,7 @@ export const IntelligenceLayer = ({ bbox }: { bbox: [number, number, number, num
         const risk = riskMap.get(v.villageId)
         const isCritical = risk?.riskBand === 'critical'
         const color = isCritical ? '#ef4444' : risk?.riskBand === 'warning' ? '#f59e0b' : risk?.riskBand === 'watch' ? '#eab308' : '#22c55e'
-        const vec = projectCoordinates(v.centroid.lat, v.centroid.lon, bbox)
+        const vec = lonLatToScene({ lat: v.centroid.lat, lon: v.centroid.lon }, bbox)
         
         return (
           <group key={v.villageId} position={[vec.x, 0, vec.z]}>
@@ -67,32 +68,42 @@ export const IntelligenceLayer = ({ bbox }: { bbox: [number, number, number, num
   )
 }
 
-const EvacuationRouteLine = ({ route, bbox }: any) => {
+const EvacuationRouteLine = ({ route, bbox }: { route: any, bbox: BoundingBox }) => {
   const lineRef = useRef<THREE.Line>(null)
   
   const points = useMemo(() => {
     return route.waypoints.map((w: any) => {
-      const vec = projectCoordinates(w.lat, w.lon, bbox)
+      const vec = lonLatToScene({ lat: w.lat, lon: w.lon }, bbox)
       return new THREE.Vector3(vec.x, 0.1, vec.z)
     })
   }, [route, bbox])
   
   const geometry = useMemo(() => {
-    const geo = new THREE.BufferGeometry().setFromPoints(points)
-    return geo
+    return new THREE.BufferGeometry().setFromPoints(points)
   }, [points])
+
+  const material = useMemo(() => {
+    return new THREE.LineBasicMaterial({
+      color: route.status === 'safe' ? '#3b82f6' : '#ef4444',
+      linewidth: 2,
+      transparent: true,
+      opacity: 0.7
+    })
+  }, [route.status])
+
+  const lineMesh = useMemo(() => {
+    return new THREE.Line(geometry, material)
+  }, [geometry, material])
   
   return (
-    <line ref={lineRef} geometry={geometry}>
-      <lineBasicMaterial color={route.status === 'safe' ? '#3b82f6' : '#ef4444'} linewidth={2} transparent opacity={0.7} />
-    </line>
+    <primitive ref={lineRef} object={lineMesh} />
   )
 }
 
-const DroneMarker = ({ mission, bbox }: any) => {
+const DroneMarker = ({ mission, bbox }: { mission: any, bbox: BoundingBox }) => {
   const ref = useRef<THREE.Group>(null)
   const waypoint = mission.waypoints[0]
-  const vec = projectCoordinates(waypoint.lat, waypoint.lon, bbox)
+  const vec = lonLatToScene({ lat: waypoint.lat, lon: waypoint.lon }, bbox)
   
   useFrame(({ clock }) => {
     if (ref.current) {

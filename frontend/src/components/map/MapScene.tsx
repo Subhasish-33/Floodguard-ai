@@ -77,16 +77,16 @@ export const MapScene = () => {
 
 
     >
-      <color attach="background" args={['#020617']} />
+      <color attach="background" args={['#f8fafc']} />
 
 
-      <ambientLight intensity={0.4} />
+      <ambientLight intensity={1.2} />
 
 
-      <directionalLight position={[18, 24, 14]} intensity={1.1} color="#dbeafe" />
+      <directionalLight position={[18, 24, 14]} intensity={2.0} color="#ffffff" />
 
 
-      <directionalLight position={[-12, 10, -8]} intensity={0.3} color="#67e8f9" />
+      <directionalLight position={[-12, 10, -8]} intensity={0.8} color="#e0f2fe" />
 
 
       <SimulationTicker />
@@ -98,7 +98,7 @@ export const MapScene = () => {
       <Suspense fallback={null}> 
 
 
-        <Stars fade radius={80} depth={35} count={1200} factor={2.3} saturation={0} speed={0.4} />
+        <fog attach="fog" args={['#f8fafc', 30, 80]} />
 
 
         <group rotation={[-Math.PI / 2, 0, 0]}>

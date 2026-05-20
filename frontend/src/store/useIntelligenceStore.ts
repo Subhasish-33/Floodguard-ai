@@ -1,6 +1,5 @@
 import { create } from 'zustand'
-import { VillageEntity, VillageFloodRisk, EvacuationRoute, DroneMission, DistrictAnalytics, AnalyticsDashboard } from '@/types/intelligence'
-import { appConfig } from '@/config/env'
+import type { VillageEntity, VillageFloodRisk, EvacuationRoute, DroneMission, AnalyticsDashboard } from '@/types/intelligence'
 
 interface IntelligenceState {
   villages: VillageEntity[]
@@ -36,7 +35,7 @@ export const useIntelligenceStore = create<IntelligenceState>((set, get) => ({
   setDroneMissions: (droneMissions) => set({ droneMissions }),
   setAnalytics: (analytics) => set({ analytics }),
   
-  fetchIntelligence: async (districtId?: string) => {
+  fetchIntelligence: async (_districtId?: string) => {
     set({ isLoadingIntelligence: true })
     try {
       // In operational mode, this would hit the FastAPI backend.
@@ -60,7 +59,7 @@ export const useIntelligenceStore = create<IntelligenceState>((set, get) => ({
         }
       })
       
-      const routes: EvacuationRoute[] = villageData.filter(v => v.evacuationCandidate).slice(0, 15).map((v, i) => ({
+      const routes: EvacuationRoute[] = villageData.filter(v => v.evacuationCandidate).slice(0, 15).map((v) => ({
         routeId: `rt_${v.villageId}`,
         originVillageId: v.villageId,
         safeZoneId: 'sz_highground',

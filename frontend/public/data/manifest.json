@@ -1,0 +1,9 @@
+{
+  "geojson": {
+    "stateBoundary": "/data/geojson/odisha-state.geojson",
+    "districts": "/data/geojson/odisha-districts.geojson"
+  },
+  "dem": {
+    "grid": "/data/dem/odisha-dem.asc"
+  }
+}

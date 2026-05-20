@@ -1,97 +1,93 @@
-# FloodGuard AI — Disaster Response Digital Twin (Phase-3)
+# FloodGuard AI — Disaster Response Digital Twin (Premium Cinematic Edition)
 
-AI-powered, Odisha-scale disaster intelligence platform with **live terrain-aware flood rehearsal**, **village intelligence**, **evacuation routing**, **drone coordination**, and HTTP simulation contracts for operational command centers.
+AI-powered, Odisha-wide disaster intelligence platform with **multi-threaded physics simulation**, **historical disaster replay**, **live weather API ingestion**, **incident command logging**, and a **premium, cinematic Apple-inspired UI**.
 
-## Strategic Narrative
+---
 
-India loses over INR 1.5 lakh crore annually to floods, cyclones, and compound disasters. Phase-3 transforms FloodGuard from a predictive simulation engine into an **operational disaster-response command interface**. It fuses physical flood propagation with human telemetry to execute life-saving logistical missions.
+## 1. Strategic Narrative
 
-## Phase-3 Capabilities (New)
+India loses over INR 1.5 lakh crore annually to cyclonic landfalls and severe flooding. **FloodGuard AI** transforms disaster response into an **enterprise-ready operational emergency command center** — combining the technical depth of Palantir Gotham with the **elegant, minimalist aesthetics of Apple-designed intelligence software**. 
 
-- **Village Intelligence System**: Real-time telemetry on affected populations, synthetic district demographics, and deterministic risk-band scoring (safe/watch/warning/critical) driven by dynamic water-level intersection.
-- **Evacuation Architecture**: A* pathfinding concepts integrated over 3D terrain to connect high-risk villages to secure high-ground zones avoiding submerged paths.
-- **Drone Coordination Layer**: Tactical UAV waypoints (surveillance, supply drops, return paths) orchestrated for live reconnaissance over flooded hotspots.
-- **Operational Command Dashboard**: Tactical intelligence panels broadcasting global escalation level, active hotspots, and district-level evacuation urgency metrics.
-- **Backend Expansion**: FastAPI endpoints prepared for PostGIS, capable of serving village intelligence, routing tasks, and drone logistics to multi-tenant consumers.
+By leveraging **client-side parallel computing threads (Web Workers)** and a **premium light-mode glassmorphism design system**, FloodGuard AI scales dynamically across hundreds of operators while maintaining a calm, immersive, and highly performant 60fps cinematic experience.
 
-## Phase-2 Capabilities (Carried Forward)
+---
 
-- Cellular-automaton-style flood propagation with configurable rainfall + hydraulic velocity.
-- Deterministic timeline scrubbing with escalation tagging.
-- Hotspot rehearsal lanes for Puri, Kendrapara, and Jagatsinghpur.
-- Animated inundation visuals: dynamic terrain tinting + translucent water veil.
+## 2. Cinematic & Enterprise Capabilities
 
-## Architecture at a Glance
+- **Cinematic Apple-Inspired UX**: A complete transition to a premium "light-mode" design system featuring soft atmospheric map lighting, fluid scroll-driven storytelling on the Landing Page, and glassmorphism Command Center panels with subtle micro-interactions driven by `framer-motion`.
+- **Thread-Decoupled Simulation Engine**: Hydro-CA, A* navigation computations, and statistical aggregations are processed completely off the rendering thread in dedicated Web Workers (`floodWorker`, `replayWorker`, `analyticsWorker`), maintaining a constant 60fps UI performance.
+- **Deterministic Historical Replay**: Load and analyze major historical disasters with frame-by-frame precision:
+  - **Cyclone Fani (2019)**: Peak rainfall of 204mm, 250km/h winds, and 1.5M evacuation sequence.
+  - **Cyclone Yaas (2021)**: Record 4.5m storm surge breaching embankments.
+- **Live Weather Ingestion Pipeline**: Active client polling and backend scheduler fetching dynamic meteorological bulletins from OpenWeatherMap and IMD. Live wind directions and rainfall accumulations act as mathematical simulation multipliers.
+- **Incident Command Feed**: Unified incident panel enabling operators to register structural failures, trace rescue logistics, write command-logs, and log audit trails.
 
-```text
-[data/manifest + GeoJSON + DEM]
-            │
-            ▼
-[Dataset sync → frontend/public/data]
-            │
-            ├─► React/Vite HUD + Zustand disaster + simulation + intelligence stores
-            │       └─► R3F scene (terrain, water, villages, drones, evacuation paths)
-            │
-            └─► simulation/ TS package ──► importable engine for worker/CLIs
-            │
-FastAPI (`backend/app`) mirrors physics + operational logistics for API consumers
-```
+---
 
-## Repository Structure (Phase-3 Updates)
+## 3. High-Performance Repository Topology
 
 ```text
 .
 ├── frontend/
 │   ├── src/
-│   │   ├── components/map/layers/  # Added IntelligenceLayer (villages, drones)
-│   │   ├── store/                  # Added useIntelligenceStore.ts
-│   │   └── types/                  # Added intelligence.ts
+│   │   ├── workers/                # Dedicated background processing threads
+│   │   │   ├── floodWorker.ts      # Cellular automaton hydrology engine
+│   │   │   ├── replayWorker.ts     # Cyclone Fani & Yaas trajectory calculations
+│   │   │   └── analyticsWorker.ts  # Real-time district pop-at-risk aggregation
+│   │   ├── components/replay/      # VCR playback control bar & scenario briefing
+│   │   └── utils/renderScheduler.ts# Priority requestAnimationFrame task throttler
 ├── backend/
 │   ├── app/
-│   │   ├── api/routes/             # Added intelligence.py (villages, routes, drones)
-│   │   ├── schemas/                # Added intelligence schemas
-├── docs/
-│   └── reports/                    # Phase-3 technical, scalability, and routing reports
+│   │   ├── core/                   # Hardened rate limiting, security headers, metrics
+│   │   ├── db/                     # PostGIS production schemas & repositories
+│   │   └── services/weather/       # Resilient OpenWeatherMap poller & IMD adapters
+├── infra/
+│   ├── Dockerfile.backend      # Production Python slim container
+│   ├── Dockerfile.frontend     # Optimized Nginx multi-stage SPA container
+│   └── docker-compose.yml      # Backend + Frontend + PostGIS orchestration
 ```
 
-## Hotspot Evacuation Workflow (Phase-3)
+---
 
-1. Operator selects a coastal district inside the `SimulationDeck`.
-2. `useSimulationLifecycle` activates flood physics and simultaneously fetches intelligence via `useIntelligenceStore`.
-3. As flood depth rises, villages automatically escalate from `watch` to `critical`.
-4. High-risk markers blink red in the 3D scene, displaying population at risk and real-time submersion depth.
-5. Evacuation routes visualize safe paths to high ground, turning red if compromised by flood propagation.
-6. Tactical UAVs execute sweeping loops over hotspots to provide simulated ground truth.
+## 4. Operational Ingest Verification & Setup
 
-## Frontend Setup
+### 4.1. Local Quickstart (Docker Compose)
+Launch the entire platform including the spatial database in detatched container mode:
+```bash
+docker-compose -f infra/docker-compose.yml up --build -d
+```
 
+### 4.2. Manual Frontend Setup
 ```bash
 cd frontend
 npm install
-npm run dev        # runs dataset sync automatically
+npm run dev        # Synchronizes assets and runs Vite HMR server
 ```
 
-## Backend Setup
-
+### 4.3. Manual Backend Setup
+Ensure GDAL dependencies are available in your local shell for spatial libraries (`geopandas`/`rasterio`):
 ```bash
 cd backend
 python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
+source .venv/bin/activate
 pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
+python -m uvicorn app.main:app --port 8000 --reload
 ```
-Interactive API docs: `http://127.0.0.1:8000/docs`
+- **Swagger Documentation**: Accessible at `http://127.0.0.1:8000/docs`
+- **Readiness Metric**: Query `http://127.0.0.1:8000/health/ready` to verify cache and dependency states.
 
-## Documentation / Reports (Phase-3)
+---
 
-- `docs/reports/phase3-technical-implementation-report.md`
-- `docs/reports/evacuation-architecture-report.md`
-- `docs/reports/routing-system-documentation.md`
-- `docs/reports/scalability-optimization-phase3.md`
-- `docs/reports/business-viability-phase3.md`
-- `docs/reports/ai-integration-recommendations-phase3.md`
-- `docs/reports/deployment-readiness-report.md`
+## 5. Comprehensive Experience Documentation Suite
 
-## Investor / Demo Guidance
-
-Demonstrate the **hotspot choreography** and advance the simulation timeline to watch the **tactical village intelligence** update in real-time. Show the Command Center side-panel to prove that this is a Palantir-style operational tool—not just a map. Emphasize that evacuation paths and drone assets actively react to the physical flood plane.
+Dive deeper into the architectural and design details of this release:
+- **Architecture Overview**: [01 Cinematic Architecture](file:///Users/subhasish/Disaster%20Response%20Digital%20Twin/docs/reports/01-Cinematic-Architecture.md)
+- **State & Routing**: [02 Routing and State](file:///Users/subhasish/Disaster%20Response%20Digital%20Twin/docs/reports/02-Routing-and-State.md)
+- **Map Rendering**: [03 Map Rendering Engine](file:///Users/subhasish/Disaster%20Response%20Digital%20Twin/docs/reports/03-Map-Rendering-Engine.md)
+- **HUD & Telemetry**: [04 Telemetry and HUD](file:///Users/subhasish/Disaster%20Response%20Digital%20Twin/docs/reports/04-Telemetry-and-HUD.md)
+- **Operational Logistics**: [05 Incident Management](file:///Users/subhasish/Disaster%20Response%20Digital%20Twin/docs/reports/05-Incident-Management.md)
+- **Animations**: [06 Motion Choreography](file:///Users/subhasish/Disaster%20Response%20Digital%20Twin/docs/reports/06-Motion-Choreography.md)
+- **VCR Control System**: [07 Replay Control System](file:///Users/subhasish/Disaster%20Response%20Digital%20Twin/docs/reports/07-Replay-Control-System.md)
+- **Live Overrides**: [08 Simulation Deck](file:///Users/subhasish/Disaster%20Response%20Digital%20Twin/docs/reports/08-Simulation-Deck.md)
+- **Escalation & Status**: [09 Threat Intelligence](file:///Users/subhasish/Disaster%20Response%20Digital%20Twin/docs/reports/09-Threat-Intelligence.md)
+- **Validation**: [10 Performance Verification](file:///Users/subhasish/Disaster%20Response%20Digital%20Twin/docs/reports/10-Performance-Verification.md)
