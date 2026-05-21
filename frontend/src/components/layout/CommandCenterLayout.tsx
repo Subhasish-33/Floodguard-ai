@@ -3,8 +3,10 @@ import { MapScene } from '@/components/map/MapScene'
 import { useSimulationLifecycle } from '@/hooks/useSimulationLifecycle'
 import { useWeatherStore } from '@/store/useWeatherStore'
 import { useIncidentStore } from '@/store/useIncidentStore'
+import { useNavigate } from 'react-router-dom'
 
 const LeftSidebar = () => {
+  const navigate = useNavigate()
   return (
     <div className="pointer-events-auto absolute left-6 top-24 bottom-24 w-64 flex flex-col justify-between glass-panel-heavy rounded-2xl p-4">
       <div>
@@ -19,23 +21,23 @@ const LeftSidebar = () => {
         </div>
 
         <nav className="flex flex-col gap-2">
-          <button className="flex items-center gap-3 w-full rounded-xl bg-blue-100/50 px-4 py-3 text-blue-700 text-left transition-colors">
+          <button onClick={() => navigate('/command-center')} className="flex items-center gap-3 w-full rounded-xl bg-blue-100/50 px-4 py-3 text-blue-700 text-left transition-colors">
             <span className="text-blue-600">◎</span>
             <span className="text-[11px] font-bold tracking-widest uppercase">Threat Map</span>
           </button>
-          <button className="flex items-center gap-3 w-full rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-100/50 text-left transition-colors">
+          <button onClick={() => navigate('/evacuation')} className="flex items-center gap-3 w-full rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-100/50 text-left transition-colors">
             <span className="text-slate-400">📊</span>
-            <span className="text-[11px] font-bold tracking-widest uppercase">District Analytics</span>
+            <span className="text-[11px] font-bold tracking-widest uppercase">Evacuation Intel</span>
           </button>
-          <button className="flex items-center gap-3 w-full rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-100/50 text-left transition-colors">
+          <button onClick={() => navigate('/weather')} className="flex items-center gap-3 w-full rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-100/50 text-left transition-colors">
             <span className="text-slate-400">((•))</span>
-            <span className="text-[11px] font-bold tracking-widest uppercase">Sensor Grid</span>
+            <span className="text-[11px] font-bold tracking-widest uppercase">Live Weather</span>
           </button>
-          <button className="flex items-center gap-3 w-full rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-100/50 text-left transition-colors">
+          <button onClick={() => navigate('/drones')} className="flex items-center gap-3 w-full rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-100/50 text-left transition-colors">
             <span className="text-slate-400">🛰</span>
-            <span className="text-[11px] font-bold tracking-widest uppercase">Satellite Imagery</span>
+            <span className="text-[11px] font-bold tracking-widest uppercase">Drone Operations</span>
           </button>
-          <button className="flex items-center gap-3 w-full rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-100/50 text-left transition-colors">
+          <button onClick={() => navigate('/incidents')} className="flex items-center gap-3 w-full rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-100/50 text-left transition-colors">
             <span className="text-slate-400">⚠</span>
             <span className="text-[11px] font-bold tracking-widest uppercase">Emergency Protocol</span>
           </button>

@@ -8,6 +8,10 @@ import { useDisasterStore } from '@/store/useDisasterStore'
 import { LandingPage } from '@/pages/LandingPage'
 import { ArchivePage } from '@/pages/ArchivePage'
 import { DistrictIntelligence } from '@/pages/DistrictIntelligence'
+import { EvacuationPage } from '@/pages/EvacuationPage'
+import { DroneOperationsPage } from '@/pages/DroneOperationsPage'
+import { LiveWeatherPage } from '@/pages/LiveWeatherPage'
+import { IncidentManagementPage } from '@/pages/IncidentManagementPage'
 
 const AppRoutes = () => {
   const location = useLocation()
@@ -83,15 +87,42 @@ const AppRoutes = () => {
           } 
         />
         <Route 
+          path="/evacuation" 
+          element={
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0">
+              <EvacuationPage />
+            </motion.div>
+          } 
+        />
+        <Route 
+          path="/drones" 
+          element={
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0">
+              <DroneOperationsPage />
+            </motion.div>
+          } 
+        />
+        <Route 
+          path="/weather" 
+          element={
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0">
+              <LiveWeatherPage />
+            </motion.div>
+          } 
+        />
+        <Route 
+          path="/incidents" 
+          element={
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0">
+              <IncidentManagementPage />
+            </motion.div>
+          } 
+        />
+        <Route 
           path="/network" 
           element={
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0"
-            >
-              <div className="flex h-screen items-center justify-center">Network Page (WIP)</div>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0">
+              <DroneOperationsPage />
             </motion.div>
           } 
         />
