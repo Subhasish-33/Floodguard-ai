@@ -32,8 +32,8 @@ const IncidentCard = ({ incident }: { incident: Incident }) => {
   const [noteText, setNoteText] = useState('')
 
   const { updateLifecycle, addNote, updateSeverity } = useIncidentStore.getState()
-  const severityStyle = SEVERITY_STYLE[incident.severity]
-  const actionCfg     = LIFECYCLE_ACTIONS[incident.lifecycle]
+  const severityStyle = SEVERITY_STYLE[incident.severity] || SEVERITY_STYLE['HIGH']
+  const actionCfg     = LIFECYCLE_ACTIONS[incident.lifecycle] || LIFECYCLE_ACTIONS['DETECTED']
 
   const handleAdvance = () => {
     if (actionCfg.next) updateLifecycle(incident.incidentId, actionCfg.next)

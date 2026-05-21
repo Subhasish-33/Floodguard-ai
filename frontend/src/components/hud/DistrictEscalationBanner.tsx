@@ -53,7 +53,7 @@ export const DistrictEscalationBanner = () => {
       // Auto-create incident
       createIncident({
         type: 'FLOOD',
-        severity: level === 'CATASTROPHIC' ? 'CRITICAL' : level as 'HIGH' | 'CRITICAL',
+        severity: level === 'WARNING' ? 'HIGH' : 'CRITICAL',
         districtId,
         title: `${level} Flood Alert — ${districtName}`,
         description: `Automated escalation detected. District reached ${level} inundation level.`,
