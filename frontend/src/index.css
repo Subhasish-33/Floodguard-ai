@@ -1,29 +1,31 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @theme {
-  --color-fg-base: #fafafa;
-  --color-fg-muted: #f4f4f5;
-  --color-fg-surface: rgba(255, 255, 255, 0.6);
-  --color-fg-glass: rgba(255, 255, 255, 0.85);
+  --color-fg-base: #f0f4f8; /* Soft atmospheric gray-blue base */
+  --color-fg-muted: #f8fafc;
+  --color-fg-surface: rgba(255, 255, 255, 0.5);
+  --color-fg-glass: rgba(255, 255, 255, 0.7);
 
-  --color-text-primary: #18181b;
-  --color-text-secondary: #52525b;
-  --color-text-tertiary: #a1a1aa;
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-tertiary: #94a3b8;
 
-  --color-accent-teal: #0d9488;
-  --color-accent-teal-soft: rgba(13, 148, 136, 0.1);
-  --color-accent-coral: #e11d48;
+  --color-accent-teal: #0f766e;
+  --color-accent-teal-soft: rgba(20, 184, 166, 0.15);
+  --color-accent-coral: #be123c;
   --color-accent-coral-soft: rgba(225, 29, 72, 0.1);
-  --color-accent-amber: #d97706;
-  --color-accent-amber-soft: rgba(217, 119, 6, 0.1);
-  --color-accent-blue: #0284c7;
+  --color-accent-amber: #b45309;
+  --color-accent-amber-soft: rgba(245, 158, 11, 0.1);
+  --color-accent-ocean: #0369a1;
 
-  --font-sans: "SF Pro Display", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: "Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: "SF Mono", "JetBrains Mono", ui-monospace, Menlo, Monaco, Consolas, monospace;
 
-  --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
-  --shadow-glass-sm: 0 4px 16px 0 rgba(31, 38, 135, 0.05);
-  --shadow-glass-lg: 0 16px 48px 0 rgba(31, 38, 135, 0.09);
+  --shadow-glass: 0 4px 24px -4px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  --shadow-glass-sm: 0 2px 12px -2px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  --shadow-glass-lg: 0 12px 32px -4px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  --shadow-glass-heavy: 0 24px 64px -8px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 :root {
@@ -44,6 +46,12 @@ html, body, #root {
   width: 100%;
   min-height: 100%;
   background-color: var(--color-fg-base);
+  letter-spacing: -0.01em; /* elegant tight tracking */
+}
+
+/* Typography Overrides */
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.02em;
 }
 
 /* Custom Scrollbar */
@@ -55,14 +63,14 @@ html, body, #root {
   background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.15);
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 4px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.2);
 }
 
-/* Base Glass Utility */
+/* Base Glass Utilities */
 .glass-panel {
   background: var(--color-fg-glass);
   backdrop-filter: blur(24px);
@@ -71,9 +79,23 @@ html, body, #root {
   box-shadow: var(--shadow-glass);
 }
 .glass-panel-heavy {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
   border: 1px solid rgba(255, 255, 255, 0.8);
   box-shadow: var(--shadow-glass-lg);
+}
+.glass-pill {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 9999px;
+  box-shadow: var(--shadow-glass-sm);
+}
+
+/* Subtle atmospheric map overlay */
+.map-overlay-gradient {
+  background: linear-gradient(to bottom, rgba(240, 244, 248, 0.6) 0%, rgba(240, 244, 248, 0.1) 40%, rgba(240, 244, 248, 0.8) 100%);
+  pointer-events: none;
 }

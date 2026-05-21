@@ -1,245 +1,189 @@
-/**
- * CommandCenterLayout.tsx — Phase-4 Operational Command Center
- * Palantir Gotham / NASA Mission Control aesthetic with:
- * - Live clock + threat level header
- * - Telemetry bar
- * - Cinematic escalation banners
- * - Replay controls
- * - Weather-aware sidebar
- * - Incident management integration
- */
-
-import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect } from 'react'
 import { MapScene } from '@/components/map/MapScene'
-import { LegendPanel } from '@/components/panels/LegendPanel'
-import { SimulationDeck } from '@/components/panels/SimulationDeck'
-import { SidebarPanel } from '@/components/panels/SidebarPanel'
-import { AlignLeft, Layers } from 'lucide-react'
-import { ReplayControlBar } from '@/components/replay/ReplayControlBar'
-import { ReplaySelector } from '@/components/replay/ReplaySelector'
-import { ThreatLevelIndicator } from '@/components/hud/ThreatLevelIndicator'
-import { TelemetryBar } from '@/components/hud/TelemetryBar'
-import { DistrictEscalationBanner } from '@/components/hud/DistrictEscalationBanner'
 import { useSimulationLifecycle } from '@/hooks/useSimulationLifecycle'
 import { useWeatherStore } from '@/store/useWeatherStore'
-import { useReplayStore } from '@/store/useReplayStore'
-import { useSimulationStore } from '@/store/useSimulationStore'
+import { useIncidentStore } from '@/store/useIncidentStore'
 
-// ─── Live Clock ───────────────────────────────────────────────────────────────
-
-const LiveClock = () => {
-  const [time, setTime] = useState(() => new Date())
-  useEffect(() => {
-    const id = setInterval(() => setTime(new Date()), 1000)
-    return () => clearInterval(id)
-  }, [])
-
+const LeftSidebar = () => {
   return (
-    <div className="text-right">
-      <p className="font-mono text-sm tabular-nums text-slate-700">
-        {time.toLocaleTimeString('en-IN', { hour12: false })} IST
-      </p>
-      <p className="text-[10px] text-slate-500">
-        {time.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-      </p>
+    <div className="pointer-events-auto absolute left-6 top-24 bottom-24 w-64 flex flex-col justify-between glass-panel-heavy rounded-2xl p-4">
+      <div>
+        <div className="flex items-center gap-3 mb-8">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <div>
+            <h2 className="text-[13px] font-bold text-slate-900">Command Center</h2>
+            <p className="text-[11px] text-slate-500">Odisha State Hub</p>
+          </div>
+        </div>
+
+        <nav className="flex flex-col gap-2">
+          <button className="flex items-center gap-3 w-full rounded-xl bg-blue-100/50 px-4 py-3 text-blue-700 text-left transition-colors">
+            <span className="text-blue-600">◎</span>
+            <span className="text-[11px] font-bold tracking-widest uppercase">Threat Map</span>
+          </button>
+          <button className="flex items-center gap-3 w-full rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-100/50 text-left transition-colors">
+            <span className="text-slate-400">📊</span>
+            <span className="text-[11px] font-bold tracking-widest uppercase">District Analytics</span>
+          </button>
+          <button className="flex items-center gap-3 w-full rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-100/50 text-left transition-colors">
+            <span className="text-slate-400">((•))</span>
+            <span className="text-[11px] font-bold tracking-widest uppercase">Sensor Grid</span>
+          </button>
+          <button className="flex items-center gap-3 w-full rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-100/50 text-left transition-colors">
+            <span className="text-slate-400">🛰</span>
+            <span className="text-[11px] font-bold tracking-widest uppercase">Satellite Imagery</span>
+          </button>
+          <button className="flex items-center gap-3 w-full rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-100/50 text-left transition-colors">
+            <span className="text-slate-400">⚠</span>
+            <span className="text-[11px] font-bold tracking-widest uppercase">Emergency Protocol</span>
+          </button>
+        </nav>
+      </div>
+
+      <div className="space-y-4">
+        <button className="w-full flex items-center justify-center gap-2 rounded-xl bg-teal-800 px-4 py-3 text-white text-[10px] font-bold tracking-widest uppercase hover:bg-teal-700 transition-colors">
+          ▶ Initiate Simulation
+        </button>
+        <button className="w-full flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-100/50 text-left transition-colors">
+          <span className="text-slate-400">⚙</span>
+          <span className="text-[11px] font-bold tracking-widest uppercase">System Health</span>
+        </button>
+      </div>
     </div>
   )
 }
 
-// ─── Connection Status Badge ──────────────────────────────────────────────────
+const RightSidebar = () => {
+  const incidents = useIncidentStore(s => s.incidents)
+  const activeIncidents = incidents.filter(i => i.lifecycle !== 'RESOLVED').slice(0, 2)
 
-const ConnectionBadge = () => {
-  const apiConnected = useWeatherStore((s) => s.apiConnected)
   return (
-    <div className="flex items-center gap-1.5">
-      <motion.div
-        className={`h-1.5 w-1.5 rounded-full ${apiConnected ? 'bg-emerald-400' : 'bg-yellow-400'}`}
-        animate={{ opacity: [1, 0.3, 1] }}
-        transition={{ duration: 2, repeat: Infinity }}
-      />
-      <span className="text-[9px] uppercase tracking-[0.35em] text-slate-500">
-        {apiConnected ? 'LIVE' : 'MOCK'}
-      </span>
+    <div className="pointer-events-auto absolute right-6 top-24 w-72 flex flex-col gap-6">
+      <div className="flex flex-col gap-3">
+        <h3 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-2">Live Alerts</h3>
+        
+        {activeIncidents.length > 0 ? activeIncidents.map(inc => (
+          <div key={inc.incidentId} className={`rounded-xl border p-4 shadow-sm backdrop-blur-md ${
+            inc.severity === 'CRITICAL' ? 'border-red-200 bg-red-50/90' : 'border-orange-200 bg-orange-50/90'
+          }`}>
+            <div className="flex items-center justify-between mb-1">
+               <div className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest ${
+                 inc.severity === 'CRITICAL' ? 'text-red-700' : 'text-orange-700'
+               }`}>
+                 <span>{inc.severity === 'CRITICAL' ? '⚠' : '≡'}</span> {inc.severity} LEVEL
+               </div>
+               <span className="text-[9px] text-slate-400">2m ago</span>
+            </div>
+            <p className="text-xs font-medium text-slate-800 leading-snug">{inc.title}</p>
+          </div>
+        )) : (
+           <div className="rounded-xl border border-slate-200 bg-slate-50/90 p-4 shadow-sm backdrop-blur-md">
+             <p className="text-xs text-slate-500">No active alerts.</p>
+           </div>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-3">
+        <h3 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-2">Evacuation Summary</h3>
+        <div className="rounded-xl border border-slate-200 bg-white/80 p-5 shadow-sm backdrop-blur-md">
+           <div className="flex items-center justify-between mb-4">
+             <span className="text-xs font-medium text-slate-600">Active Zones</span>
+             <span className="text-xl font-light text-teal-800">3</span>
+           </div>
+           <div className="flex items-center justify-between mb-6">
+             <span className="text-xs font-medium text-slate-600">People Relocated</span>
+             <span className="text-2xl font-light text-teal-800">12.4k</span>
+           </div>
+           <div className="space-y-1.5">
+             <div className="flex justify-between text-[9px] font-bold uppercase tracking-widest text-slate-500">
+                <span>Capacity</span>
+             </div>
+             <div className="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
+                <div className="h-full bg-teal-700 w-[65%] rounded-full"></div>
+             </div>
+           </div>
+        </div>
+      </div>
     </div>
   )
 }
 
-// ─── Main Layout ──────────────────────────────────────────────────────────────
+const BottomPill = () => {
+  return (
+    <div className="pointer-events-auto absolute bottom-6 left-1/2 -translate-x-1/2">
+      <div className="glass-pill px-2 py-2 flex items-center gap-6">
+        <div className="flex items-center gap-2 pl-2">
+          <button className="text-slate-500 hover:text-slate-800">⏮</button>
+          <button className="h-10 w-10 flex items-center justify-center rounded-full bg-teal-700 text-white shadow-md hover:bg-teal-800">
+            ▶
+          </button>
+          <button className="text-slate-500 hover:text-slate-800">⏭</button>
+          <div className="ml-2 flex flex-col justify-center rounded-lg bg-white/50 px-3 py-1 border border-white">
+            <span className="text-[9px] font-bold text-slate-500 uppercase">T-</span>
+            <span className="text-xs font-mono font-medium text-slate-800">04:00:00</span>
+          </div>
+        </div>
+
+        <div className="h-8 w-px bg-slate-300"></div>
+
+        <div className="flex items-center gap-4 pr-6">
+          <button className="flex flex-col items-center gap-1 text-teal-700">
+            <span className="text-lg">📈</span>
+            <span className="text-[9px] font-bold tracking-widest uppercase">Timeline</span>
+            <div className="h-0.5 w-full bg-teal-600 rounded-full mt-0.5"></div>
+          </button>
+          <button className="flex flex-col items-center gap-1 text-slate-500 hover:text-slate-800 transition-colors">
+            <span className="text-lg">♺</span>
+            <span className="text-[9px] font-bold tracking-widest uppercase">Scenarios</span>
+            <div className="h-0.5 w-full bg-transparent rounded-full mt-0.5"></div>
+          </button>
+          <button className="flex flex-col items-center gap-1 text-slate-500 hover:text-slate-800 transition-colors">
+            <span className="text-lg">↺</span>
+            <span className="text-[9px] font-bold tracking-widest uppercase">Playback</span>
+            <div className="h-0.5 w-full bg-transparent rounded-full mt-0.5"></div>
+          </button>
+          <button className="flex flex-col items-center gap-1 text-slate-500 hover:text-slate-800 transition-colors">
+            <span className="text-lg">◎</span>
+            <span className="text-[9px] font-bold tracking-widest uppercase">Forecast</span>
+            <div className="h-0.5 w-full bg-transparent rounded-full mt-0.5"></div>
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export const CommandCenterLayout = () => {
-  const [replaySelectorOpen, setReplaySelectorOpen] = useState(false)
-  const [leftHovered, setLeftHovered] = useState(false)
-  const [rightHovered, setRightHovered] = useState(false)
   useSimulationLifecycle()
-
   const startWeatherPolling = useWeatherStore((s) => s.startPolling)
-  const replayMode          = useReplayStore((s) => s.mode)
-  const escalation          = useSimulationStore((s) => s.escalation)
 
-  // Start weather polling on mount
   useEffect(() => {
     startWeatherPolling()
   }, [startWeatherPolling])
 
-  // Dynamic scan-line opacity based on escalation
-  const scanlineOpacity =
-    escalation?.code === 'LIVE_COORDINATION' ? 0.03 : 0
-
   return (
-    <div className="relative min-h-screen overflow-hidden text-slate-900">
-
-      {/* Background scan-line effect for critical escalations */}
-      <AnimatePresence>
-        {scanlineOpacity > 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: scanlineOpacity }}
-            exit={{ opacity: 0 }}
-            className="pointer-events-none fixed inset-0 z-0"
-            style={{
-              backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(239,68,68,0.04) 2px, rgba(239,68,68,0.04) 4px)',
-            }}
-          />
-        )}
-      </AnimatePresence>
-
-      {/* Cinematic escalation banners */}
-      <DistrictEscalationBanner />
-
-      {/* Replay scenario selector modal */}
-      <ReplaySelector open={replaySelectorOpen} onClose={() => setReplaySelectorOpen(false)} />
-
-      {/* ═══════════ HEADER ═══════════ */}
-      <header className="fixed left-0 right-0 top-0 z-30 glass-panel border-b-0 shadow-sm text-slate-900">
-        <div className="mx-auto max-w-[1700px] px-4">
-          <div className="flex items-center gap-4 py-2.5">
-
-            <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-teal-500/20 bg-teal-500/10 text-teal-700">
-                <span className="text-sm">🛡️</span>
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-teal-600">FloodGuard AI</p>
-                  <span className="rounded border border-teal-500/20 bg-teal-500/10 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-widest text-teal-700">Phase-4</span>
-                </div>
-                <h1 className="text-sm font-semibold text-slate-900">Odisha Disaster Intelligence Command</h1>
-              </div>
-            </div>
-
-            {/* Telemetry bar */}
-            <div className="hidden lg:block">
-              <TelemetryBar />
-            </div>
-
-            <div className="flex flex-1 items-center justify-end gap-4">
-              <ConnectionBadge />
-
-              <button
-                type="button"
-                id="btn-open-replay-selector"
-                onClick={() => setReplaySelectorOpen(true)}
-                className={`flex items-center gap-2 rounded-xl border px-3 py-1.5 text-[10px] uppercase tracking-widest transition-colors ${
-                  replayMode === 'replay'
-                    ? 'border-red-400/40 bg-red-500/10 text-red-600'
-                    : 'border-slate-300 text-slate-600 hover:border-slate-400 hover:text-slate-900'
-                }`}
-              >
-                {replayMode === 'replay' ? '⏺ Replay Active' : '🎬 History Replay'}
-              </button>
-
-              <LiveClock />
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* ═══════════ FULL BLEED MAP ═══════════ */}
-      <div className="fixed inset-0 z-0">
+    <div className="relative h-screen w-full overflow-hidden text-slate-900 bg-[#f0f4f8]">
+      {/* Background map */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 map-overlay-gradient z-10"></div>
         <MapScene />
-        {/* Replay overlay in map when active */}
-        {replayMode === 'replay' && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="absolute left-6 top-24 z-10 rounded-xl border border-red-200 bg-white/80 px-3 py-1.5 backdrop-blur-xl shadow-lg"
-          >
-            <p className="text-[9px] font-bold uppercase tracking-widest text-red-600">
-              ⏺ Historical Replay
-            </p>
-          </motion.div>
-        )}
       </div>
 
-      {/* ═══════════ FLOATING CONTROLS ═══════════ */}
-      <div className="fixed inset-0 pointer-events-none z-20">
-        
-        {/* LEFT SIDEBAR (Bunker / Hover Expand) */}
-        <motion.aside
-          onHoverStart={() => setLeftHovered(true)}
-          onHoverEnd={() => setLeftHovered(false)}
-          animate={{ 
-            x: leftHovered ? 0 : -320, 
-            opacity: leftHovered ? 1 : 0.4
-          }}
-          transition={{ type: 'spring', damping: 24, stiffness: 200 }}
-          className="pointer-events-auto absolute left-4 top-24 flex w-[320px] flex-col gap-4"
-        >
-          {/* Bunker Icon when collapsed */}
-          {!leftHovered && (
-            <motion.div 
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-              className="absolute -right-12 top-0 flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl glass-panel text-slate-500 hover:text-slate-900"
-            >
-              <AlignLeft size={18} />
-            </motion.div>
-          )}
-          
-          <div className="rounded-2xl glass-panel p-4">
-            <ThreatLevelIndicator />
-          </div>
-          <SidebarPanel />
-        </motion.aside>
-
-        {/* BOTTOM DECK */}
-        <div className="pointer-events-auto absolute bottom-8 left-1/2 -translate-x-1/2">
-          <AnimatePresence mode="wait">
-            {replayMode === 'replay' ? (
-              <motion.div key="replay" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}>
-                <ReplayControlBar />
-              </motion.div>
-            ) : (
-              <motion.div key="live" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}>
-                <SimulationDeck />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* RIGHT SIDEBAR (Bunker / Hover Expand) */}
-        <motion.aside
-          onHoverStart={() => setRightHovered(true)}
-          onHoverEnd={() => setRightHovered(false)}
-          animate={{ 
-            x: rightHovered ? 0 : 300, 
-            opacity: rightHovered ? 1 : 0.4
-          }}
-          transition={{ type: 'spring', damping: 24, stiffness: 200 }}
-          className="pointer-events-auto absolute right-4 top-24 flex w-[300px] flex-col gap-4"
-        >
-          {/* Bunker Icon when collapsed */}
-          {!rightHovered && (
-            <motion.div 
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-              className="absolute -left-12 top-0 flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl glass-panel text-slate-500 hover:text-slate-900"
-            >
-              <Layers size={18} />
-            </motion.div>
-          )}
-
-          <LegendPanel />
-        </motion.aside>
+      {/* Floating Layout Overlays */}
+      <div className="absolute inset-0 pointer-events-none z-20">
+        <LeftSidebar />
+        <RightSidebar />
+        <BottomPill />
+      </div>
+      
+      {/* Map Controls */}
+      <div className="pointer-events-auto absolute bottom-8 right-6 flex flex-col gap-2 z-20">
+        <button className="h-10 w-10 rounded-full glass-panel flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-white/80">+</button>
+        <button className="h-10 w-10 rounded-full glass-panel flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-white/80">-</button>
+        <button className="h-10 w-10 rounded-full glass-panel flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-white/80">⌖</button>
+        <button className="h-10 w-10 rounded-full glass-panel flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-white/80">⚏</button>
       </div>
     </div>
   )

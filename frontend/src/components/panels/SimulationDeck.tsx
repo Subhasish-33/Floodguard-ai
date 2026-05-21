@@ -62,6 +62,7 @@ export const SimulationDeck = () => {
 
               <button
                 key={button.id}
+                data-active={selected}
 
 
                 type="button"

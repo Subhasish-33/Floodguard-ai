@@ -2,7 +2,7 @@ import { Suspense, useMemo, useRef } from 'react'
 
 import { Canvas } from '@react-three/fiber'
 
-import { OrbitControls, Stars } from '@react-three/drei'
+import { OrbitControls } from '@react-three/drei'
 
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 
@@ -77,30 +77,14 @@ export const MapScene = () => {
 
 
     >
-      <color attach="background" args={['#f8fafc']} />
-
-
+      {/* Removed opaque background color to allow atmospheric CSS gradients to show through */}
       <ambientLight intensity={1.2} />
-
-
       <directionalLight position={[18, 24, 14]} intensity={2.0} color="#ffffff" />
-
-
       <directionalLight position={[-12, 10, -8]} intensity={0.8} color="#e0f2fe" />
-
-
       <SimulationTicker />
-
-
       <CameraDirector orbitRef={orbitRef} />
-
-
       <Suspense fallback={null}> 
-
-
-        <fog attach="fog" args={['#f8fafc', 30, 80]} />
-
-
+        <fog attach="fog" args={['#e0e7ff', 30, 80]} />
         <group rotation={[-Math.PI / 2, 0, 0]}>
 
           <TerrainLayer />

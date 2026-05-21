@@ -1,135 +1,137 @@
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { ArrowRight, Activity, Map, Navigation, Radio, Wind } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
+import { Navigation } from 'lucide-react'
 
-const features = [
-  { icon: Map, title: 'Terrain Intelligence', desc: 'Millimeter-accurate 3D digital twin of Odisha\'s topology.' },
-  { icon: Activity, title: 'Flood Prediction', desc: 'Real-time cellular automata simulating hydraulic propagation.' },
-  { icon: Navigation, title: 'AI Routing', desc: 'Dynamic A* pathfinding for safe evacuation corridors.' },
-  { icon: Radio, title: 'Drone Operations', desc: 'Live UAV telemetry and automated search grids.' },
-  { icon: Wind, title: 'Live Telemetry', desc: 'Ingesting IMD radar and local weather station data.' }
-]
-
-export const LandingPage = ({ onLaunch }: { onLaunch: () => void }) => {
-  const { scrollY } = useScroll()
-  const opacity = useTransform(scrollY, [0, 300], [1, 0])
-  const y = useTransform(scrollY, [0, 300], [0, -50])
+export const LandingPage = () => {
+  const navigate = useNavigate()
 
   return (
-    <div className="relative min-h-[200vh] w-full bg-[#f8fafc] text-slate-900 overflow-x-hidden">
-      
-      {/* Immersive Hero */}
-      <section className="relative h-screen w-full flex flex-col items-center justify-center px-4">
-        {/* Subtle radial gradient background to simulate atmospheric fog */}
-        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_40%,rgba(255,255,255,0.8)_0%,#f8fafc_60%)] z-10" />
-        
-        <motion.div 
-          style={{ opacity, y }}
-          className="relative z-20 flex flex-col items-center text-center max-w-4xl"
+    <div className="relative h-screen w-full overflow-y-auto overflow-x-hidden bg-white custom-scrollbar">
+      {/* Hero Section */}
+      <section className="relative flex h-[90vh] w-full flex-col items-center justify-center overflow-hidden">
+        {/* Background Image & Gradient Overlay */}
+        <div 
+          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1542263158-958852e96030?q=80&w=2560&auto=format&fit=crop")' }}
         >
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <span className="inline-block rounded-full bg-slate-900/5 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-slate-500 mb-6 border border-slate-200">
-              FloodGuard AI • Phase 4
-            </span>
-          </motion.div>
+          <div className="absolute inset-0 bg-gradient-to-b from-[#e0e7ff]/30 via-transparent to-white"></div>
+        </div>
 
+        {/* Hero Content */}
+        <div className="relative z-10 flex flex-col items-center px-4 text-center mt-20">
           <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="text-5xl md:text-7xl font-bold tracking-tight text-slate-900 leading-[1.1]"
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="max-w-4xl text-5xl font-bold tracking-tight text-slate-900 md:text-7xl lg:text-8xl"
+            style={{ lineHeight: 1.1 }}
           >
-            AI Disaster Intelligence <br className="hidden md:block"/> for a Resilient Odisha
+            AI Disaster Intelligence for a Resilient Odisha
           </motion.h1>
-          
+
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-6 text-xl text-slate-500 max-w-2xl font-light"
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            className="mt-6 max-w-2xl text-lg font-medium text-slate-700 md:text-xl"
           >
-            Minimal, elegant, human-centered. A predictive geospatial operating system designed to safeguard millions through actionable climatic insights.
+            Predictive hydro-analytics and real-time situational awareness. Empowering command centers with the clarity needed before the storm arrives.
           </motion.p>
 
-          <motion.button
-            onClick={onLaunch}
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="mt-12 flex items-center gap-2 rounded-full bg-slate-900 px-8 py-4 text-sm font-medium text-white shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-colors hover:bg-slate-800"
+            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+            className="mt-10"
           >
-            Launch Command Center
-            <ArrowRight size={18} />
-          </motion.button>
-        </motion.div>
-
-        {/* Scroll Indicator */}
-        <motion.div 
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute bottom-12 z-20 text-slate-400"
-        >
-          <div className="w-[1px] h-12 bg-gradient-to-b from-slate-300 to-transparent mx-auto" />
-        </motion.div>
+            <button 
+              onClick={() => navigate('/command-center')}
+              className="group relative flex items-center gap-3 rounded-xl bg-teal-700 px-8 py-4 font-semibold text-white shadow-lg transition-all hover:bg-teal-800 hover:shadow-xl hover:shadow-teal-900/20 active:scale-95"
+            >
+              <Navigation size={20} className="transition-transform group-hover:translate-x-1" />
+              Initialize Command
+            </button>
+          </motion.div>
+        </div>
       </section>
 
-      {/* Capabilities Storytelling */}
-      <section className="relative z-20 bg-white py-32 px-4 border-t border-slate-100">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-24">
-            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-slate-900">
-              Operational Clarity. <br /> Computational Precision.
-            </h2>
+      {/* Lifecycle Section */}
+      <section className="relative z-20 flex w-full flex-col items-center bg-white px-6 py-24">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">The Lifecycle of Resilience</h2>
+          <p className="mt-4 text-slate-500 max-w-lg mx-auto">
+            From early atmospheric signals to coordinated on-ground response, intelligence flows seamlessly.
+          </p>
+        </div>
+
+        <div className="mt-16 grid w-full max-w-6xl grid-cols-1 gap-8 md:grid-cols-3">
+          {/* Card 1 */}
+          <div className="flex flex-col rounded-3xl border border-slate-100 bg-slate-50 p-8 shadow-sm transition-shadow hover:shadow-md">
+            <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100 text-blue-600">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <h3 className="text-xl font-bold text-slate-900">Detection</h3>
+            <p className="mt-3 text-sm text-slate-600 leading-relaxed">
+              Atmospheric modeling showing pressure differentials over the Bay of Bengal, predicting cyclonic formation 72 hours in advance.
+            </p>
+            <div className="mt-8 h-32 w-full rounded-xl bg-gradient-to-br from-blue-200 to-teal-200 opacity-60"></div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, i) => (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.7, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="group p-8 rounded-3xl bg-slate-50/50 border border-slate-100 hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-              >
-                <div className="h-12 w-12 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-slate-900 shadow-sm mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <feature.icon size={24} strokeWidth={1.5} />
-                </div>
-                <h3 className="text-xl font-medium text-slate-900 mb-3">{feature.title}</h3>
-                <p className="text-slate-500 leading-relaxed font-light">{feature.desc}</p>
-              </motion.div>
-            ))}
+          {/* Card 2 */}
+          <div className="flex flex-col rounded-3xl border border-slate-100 bg-slate-50 p-8 shadow-sm transition-shadow hover:shadow-md">
+            <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-100 text-orange-600">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+            </div>
+            <h3 className="text-xl font-bold text-slate-900">Escalation</h3>
+            <p className="mt-3 text-sm text-slate-600 leading-relaxed">
+              Dynamic inundation mapping with glowing flow rate indicators projecting flood paths across vulnerable districts.
+            </p>
+            <div className="mt-8 h-32 w-full rounded-xl bg-gradient-to-br from-slate-300 to-slate-400 opacity-60"></div>
+          </div>
+
+          {/* Card 3 */}
+          <div className="flex flex-col rounded-3xl border border-slate-100 bg-slate-50 p-8 shadow-sm transition-shadow hover:shadow-md">
+            <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-100 text-teal-600">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+            <h3 className="text-xl font-bold text-slate-900">Coordination</h3>
+            <p className="mt-3 text-sm text-slate-600 leading-relaxed">
+              AI-optimized evacuation routing and drone dispatch pulses ensuring safe passage before infrastructure compromise.
+            </p>
+            <div className="mt-8 h-32 w-full rounded-xl bg-gradient-to-br from-teal-50 to-slate-100 opacity-60 flex items-center justify-center">
+               <div className="h-10 w-10 rounded-full bg-white shadow-sm border flex items-center justify-center text-teal-700">
+                  <Navigation size={16} />
+               </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Final CTA Transition */}
-      <section className="relative z-20 bg-slate-900 py-32 px-4 text-center">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-2xl mx-auto"
-        >
-          <h2 className="text-4xl font-semibold tracking-tight text-white mb-8">
-            Experience the Engine
-          </h2>
-          <button
-            onClick={onLaunch}
-            className="flex items-center gap-2 mx-auto rounded-full bg-white px-8 py-4 text-sm font-medium text-slate-900 shadow-lg transition-colors hover:bg-slate-100"
-          >
-            Enter Command Center
-            <ArrowRight size={18} />
-          </button>
-        </motion.div>
+      {/* Preview Section */}
+      <section className="relative z-20 flex w-full items-center justify-center bg-[#f8fafc] px-6 py-24">
+        <div className="flex w-full max-w-6xl flex-col items-center justify-between gap-12 md:flex-row">
+          <div className="max-w-md">
+            <h2 className="text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">Command Center Intelligence</h2>
+            <p className="mt-4 text-slate-600 leading-relaxed">
+              Step into the operational hub. Experience the map-first interface designed for clarity under pressure.
+            </p>
+            <button 
+              onClick={() => navigate('/command-center')}
+              className="mt-8 group flex items-center gap-2 rounded-lg bg-slate-100 px-6 py-3 font-semibold text-slate-900 transition-colors hover:bg-slate-200"
+            >
+              Enter Operational Mode
+              <span className="transition-transform group-hover:translate-x-1">→</span>
+            </button>
+          </div>
+          <div className="w-full max-w-xl rounded-2xl bg-slate-800 p-2 shadow-2xl">
+            {/* Mock Monitor placeholder */}
+            <div className="aspect-video w-full rounded-xl bg-slate-900 border border-slate-700 overflow-hidden relative">
+               <div className="absolute inset-0 bg-gradient-to-tr from-slate-900 to-slate-800 opacity-50"></div>
+               <div className="absolute inset-0 flex items-center justify-center text-slate-500 font-mono text-xs">System Preview</div>
+            </div>
+          </div>
+        </div>
       </section>
-
     </div>
   )
 }
