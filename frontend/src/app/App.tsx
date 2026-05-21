@@ -12,6 +12,7 @@ import { EvacuationPage } from '@/pages/EvacuationPage'
 import { DroneOperationsPage } from '@/pages/DroneOperationsPage'
 import { LiveWeatherPage } from '@/pages/LiveWeatherPage'
 import { IncidentManagementPage } from '@/pages/IncidentManagementPage'
+import { AnalyticsPage } from '@/pages/AnalyticsPage'
 
 const AppRoutes = () => {
   const location = useLocation()
@@ -115,6 +116,14 @@ const AppRoutes = () => {
           element={
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0">
               <IncidentManagementPage />
+            </motion.div>
+          } 
+        />
+        <Route 
+          path="/analytics" 
+          element={
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0">
+              <AnalyticsPage />
             </motion.div>
           } 
         />

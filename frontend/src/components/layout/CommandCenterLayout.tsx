@@ -25,8 +25,12 @@ const LeftSidebar = () => {
             <span className="text-blue-600">◎</span>
             <span className="text-[11px] font-bold tracking-widest uppercase">Threat Map</span>
           </button>
-          <button onClick={() => navigate('/evacuation')} className="flex items-center gap-3 w-full rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-100/50 text-left transition-colors">
+          <button onClick={() => navigate('/analytics')} className="flex items-center gap-3 w-full rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-100/50 text-left transition-colors">
             <span className="text-slate-400">📊</span>
+            <span className="text-[11px] font-bold tracking-widest uppercase">Strategic Analytics</span>
+          </button>
+          <button onClick={() => navigate('/evacuation')} className="flex items-center gap-3 w-full rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-100/50 text-left transition-colors">
+            <span className="text-slate-400">🏃</span>
             <span className="text-[11px] font-bold tracking-widest uppercase">Evacuation Intel</span>
           </button>
           <button onClick={() => navigate('/weather')} className="flex items-center gap-3 w-full rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-100/50 text-left transition-colors">
